@@ -1,0 +1,27 @@
+{
+  "name": "rtw",
+  "version": "1.0.0",
+  "description": "Repository for the course Real Time Web for the minor Web Development at the University of Applied Sciences Amsterdam.",
+  "main": "index.js",
+  "scripts": {
+    "test": "xo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sidstumple/rtw.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sidstumple/rtw/issues"
+  },
+  "homepage": "https://github.com/Sidstumple/rtw#readme",
+  "dependencies": {
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
+    "socket.io": "^1.7.3"
+  },
+  "devDependencies": {
+    "xo": "^0.18.1"
+  }
+}
