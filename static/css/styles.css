@@ -1,0 +1,102 @@
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+  height: 100vh;
+  width: 100vw;
+  background: #F4F1DE;
+}
+
+main {
+  height: 100%;
+}
+
+.users {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  background: #E07A5F;
+}
+
+.two-column {
+    display: flex;
+    height: 100%;
+}
+
+#users {
+  height: 100%;
+}
+
+#username {
+    width: 80vw;
+    height: 4em;
+    font-size: 1em;
+    box-sizing: border-box;
+    padding: 1em;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+  padding: 0.5em 1em;
+}
+
+.chat {
+  height: 100%;
+}
+
+.onlineUsers {
+  height: 100%;
+  background: #81B29A;
+  color: white;
+  width: 10em;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+.onlineUsers ul li {
+  text-transform: capitalize;
+  padding: 0.4em 0;
+}
+
+.message-list {
+  background: #F4F1DE;
+}
+
+.message-list li:first-letter {
+  text-transform: capitalize;
+}
+
+#messageForm {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+#message {
+  width: 100%;
+  height: 4em;
+  box-sizing: border-box;
+  font-size: 1em;
+  padding: 1em;
+}
+
+.submitMessage {
+  border: none;
+  width: 10em;
+  font-size: 1em;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: white;
+  background: #E07A5F;
+}
+
+.hide {
+  display: none;
+}

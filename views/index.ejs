@@ -3,8 +3,88 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <link rel="stylesheet" href="static/css/styles.css">
+
   </head>
   <body>
-    <h1>Index</h1>
+    <main>
+      <div class="users" id="userFormArea">
+        <form id="userForm">
+          <h1>Enter username to chat:</h1>
+          <input type="text" id="username" placeholder="Enter Username" autocomplete="off">
+        </form>
+      </div>
+
+      <div class="chat hide" id="chatArea">
+
+        <div class="two-column">
+          <div id="onlineUsers" class="onlineUsers">
+            <h4>Online users:</h4>
+            <ul id="users">
+
+            </ul>
+          </div>
+
+          <ul class="message-list" id="message-list">
+          </ul>
+        </div>
+
+        <div class="input-message">
+          <form id="messageForm">
+            <input type="text" id="message" autocomplete="off" autofocus="true" placeholder="Type a message"/>
+            <input class="submitMessage" type="submit" value="Send">
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      (function() {
+        var socket = io();
+        var chatArea = document.getElementById('chatArea')
+        var message = document.getElementById('message');
+        var messageForm = document.getElementById('messageForm');
+        var chat = document.getElementById('message-list');
+        var username = document.getElementById('username');
+        var userForm = document.getElementById('userForm');
+        var userFormArea = document.getElementById('userFormArea');
+        var users = document.getElementById('users');
+
+        userForm.addEventListener('submit', function() {
+          event.preventDefault();
+          socket.emit('new user', username.value, function(data){
+            if(data){
+              userFormArea.classList.add('hide');
+              chatArea.classList.remove('hide');
+            }
+          });
+          username.value = '';
+        })
+
+        socket.on('get users', function(data) {
+          var html = '';
+          for(i = 0; i < data.length; i++){
+            html += `<li>${data[i]}</li>`;
+          }
+          users.innerHTML = html;
+        })
+
+        messageForm.addEventListener('submit', function(){
+          event.preventDefault();
+          socket.emit('send message', message.value);
+          message.value = '';
+        });
+
+        socket.on('new message', function(data) {
+          var newMessage = document.createElement('li');
+          var messageSender = document.createTextNode(data.user);
+          console.log(data.user);
+          var messageContent = document.createTextNode(data.msg);
+          newMessage.append(messageSender, ': ' ,messageContent);
+          chat.append(newMessage)
+        });
+      })();
+    </script>
   </body>
 </html>
