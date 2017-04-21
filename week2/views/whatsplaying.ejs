@@ -3,20 +3,30 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
   </head>
   <body>
     <h1>What is playing?</h1>
-    <div class="">
-      <img src="" alt="">
-    </div>
-    <div class="">
-      <p><strong>Artist:</strong>
-        <% body.item.artists.map(function(obj){ %>
-        <%= obj.name %>
-      <% })%>
-      </p>
-      <p><strong>Song: </strong><%= body.item.name %></p>
+    <div class="info">
+      <div id="image" class="image">
+        <% body.item.album.images.map(function(obj){%>
+        <img src="<%= obj.url %>" alt="">
+        <% }) %>
+      </div>
+      <div class="text">
+        <p><strong>Artist:</strong>
+          <% body.item.artists.map(function(obj){ %>
+        <span id="artist"><%= obj.name %></span>
+        <% })%>
+        </p>
+        <p><strong>Song: </strong><span id="song"><%= body.item.name %></span></p>
+      </div>
     </div>
 
   </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="static/js/index.js">
+
+  </script>
 </html>

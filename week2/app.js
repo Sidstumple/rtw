@@ -1,14 +1,24 @@
-var express = require('express'); // Express web server framework
+// var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var env = require('dotenv').config();
-
-// var io = require('socket.io');
-
+var express = require('express');
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+server.listen(3000);
+console.log('server listening on port 3000');
+
+app.use('/static', express.static('./static'));
+
+
+
 var client_id = process.env.CLIENT_ID; // Your client id
 var client_secret = process.env.CLIENT_SECRET; // Your secret
 var redirect_uri = process.env.REDIRECT_URI; // Your redirect uri
+var users = [];
+var connections = [];
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -63,7 +73,7 @@ app.get('/callback', function(req, res) {
     var access_token = body.access_token;
     var refresh_token = body.refresh_token;
     app.accessToken = body.access_token;
-    console.log(body);
+    // console.log(body);
     res.redirect('/whatsplaying');
   });
 });
@@ -80,16 +90,55 @@ app.get('/whatsplaying', function(req, res) {
     }
 
     request.get(options, function(error, response, body) {
-
-      console.log(body.item.album.images);
+      // console.log(app.accessToken);
+      // console.log(body.item);
 
       res.render('whatsplaying', {body: body});
     });
   } else {
     res.redirect('/');
   }
-
 })
 
-console.log('Listening on 3000');
-app.listen(3000);
+io.on('connection', function(socket){
+  connections.push(socket);
+  console.log('Connected: %s sockets connected', connections.length);
+
+  // Disconnect
+  socket.on('disconnect', function(data){
+    users.splice(users.indexOf(socket.username), 1);
+    connections.splice(connections.indexOf(socket), 1);
+    console.log('Disconnected: %s sockets connected', connections.length)
+  });
+
+  // Checks if a new song is played:
+  socket.on('next song', function(data) {
+    // console.log(data.song, data.artist);
+    var options = {
+      url: 'https://api.spotify.com/v1/me/player/currently-playing',
+      headers: { 'Authorization': 'Bearer ' + app.accessToken },
+      json: true
+    }
+
+    request.get(options, function(error, response, body) {
+      console.log(data.song == body.item.name);
+      console.log(data.artist == app.artists);
+      console.log(data.song);
+      console.log(body.item.name);
+
+
+      body.item.artists.map(function(obj){
+        app.artists = obj.name;
+      })
+
+      if(data.song !== body.item.name || data.artist !== app.artists) {
+        console.log('update this sonnng!');
+        socket.emit('update song', {body: body});
+      } else {
+        console.log('still listening to the same tune?');
+      }
+    });
+    console.log('Check if a new song is played');
+  })
+
+});

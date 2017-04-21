@@ -1,0 +1,28 @@
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+img{
+  display: none;
+}
+img:nth-of-type(3) {
+  display: block;
+}
+.newsong img{
+  display: block;
+}
+
+.info {
+  max-width: max-content;
+  padding: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background: #333;
+  color: white;
+  align-items: center;
+}
+
+.text {
+  margin-left: 1em;
+}
