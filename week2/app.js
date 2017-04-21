@@ -1,10 +1,9 @@
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
 var querystring = require('querystring');
-// var cookieParser = require('cookie-parser');
 var env = require('dotenv').config();
 
-var io = require('socket.io');
+// var io = require('socket.io');
 
 var app = express();
 var client_id = process.env.CLIENT_ID; // Your client id

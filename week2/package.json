@@ -2,7 +2,7 @@
   "name": "spotify-real-time-app",
   "version": "1.0.0",
   "description": "See a real time depiction of the most listened to tracks on Spotify.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
