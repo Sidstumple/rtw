@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <h1>What is playing?</h1>
+    <div class="">
+      <img src="" alt="">
+    </div>
+    <div class="">
+      <p><strong>Artist:</strong>
+        <% body.item.artists.map(function(obj){ %>
+        <%= obj.name %>
+      <% })%>
+      </p>
+      <p><strong>Song: </strong><%= body.item.name %></p>
+    </div>
+
+  </body>
+</html>
