@@ -7,12 +7,10 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-server.listen(3000);
+server.listen(process.env.PORT || 3000);
 console.log('server listening on port 3000');
 
 app.use('/static', express.static('./static'));
-
-
 
 var client_id = process.env.CLIENT_ID; // Your client id
 var client_secret = process.env.CLIENT_SECRET; // Your secret
