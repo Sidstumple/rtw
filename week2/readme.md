@@ -1,6 +1,6 @@
 # Real time Spotify app
 A real time depiction of what a Spotify user is listening to.
-View demo on: 
+View demo on:
 https://spotify-rtw.herokuapp.com/
 
 ## Description
@@ -16,7 +16,7 @@ res.redirect('https://accounts.spotify.com/authorize?' +
         redirect_uri: redirect_uri,
     }));
 ```
-This takes the unique client_id that was specified by Spotify to let the user know what application is trying to access their profile. After the user logs in they will be redirected to the redirect URI I specified on the Spotify website. 
+This takes the unique client_id that was specified by Spotify to let the user know what application is trying to access their profile. After the user logs in they will be redirected to the redirect URI I specified on the Spotify website.
 The scope I declared determines what data I will have access to:
 ```
 var scope = 'user-read-private user-read-email user-read-currently-playing user-read-playback-state user-read-recently-played';
@@ -52,7 +52,7 @@ request.post(authOptions, function(error, response, body) {
 
 ## Spotify API
 This app uses the Spotify Web API. This Web API lets applications fetch data from the Spotify music catalog and manage user’s playlists and saved music. I used it to find out what the user is currently listening to. I am using `request` to do API calls.
-The API needs OAuth to get user-specific information on listened to songs, `headers` is necessary to get the right authorisation. 
+The API needs OAuth to get user-specific information on listened to songs, `headers` is necessary to get the right authorisation.
 ```
 var options = {
       url: 'https://api.spotify.com/v1/me/player/currently-playing',
@@ -64,10 +64,10 @@ var options = {
       res.render('whatsplaying', {body: body});
     });
 ```
-Using the node module `ejs` I am sending data to the `whatsplaying.ejs` file. 
+Using the node module `ejs` I am sending data to the `whatsplaying.ejs` file.
 
 ## Socket.io
-To send data from the server to the client and back I use `socket.io`. I use it to send the current `innerHTML` (song + artist) of HTML tags to the server to compare with new data. 
+To send data from the server to the client and back I use `socket.io`. I use it to send the current `innerHTML` (song + artist) of HTML tags to the server to compare with new data.
 
 I used `setInterval` to make sure data is checked every second, I couldn't think of another way to check if the data changed, but I really would like to!
 
