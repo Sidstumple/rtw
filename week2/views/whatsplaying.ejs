@@ -2,27 +2,25 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>What's Playing</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
   </head>
   <body>
+    <div class="profilebar">
+      <img src="<%= proImage %>" alt="profile picture" class="profile-image">
+      <p><%= profile.display_name %></p>
+    </div>
     <h1>What is playing?</h1>
     <div class="info">
-      <div id="image" class="image">
-        <% body.item.album.images.map(function(obj){%>
-        <img src="<%= obj.url %>" alt="">
-        <% }) %>
-      </div>
-      <div class="text">
-        <p><strong>Artist:</strong>
-          <% body.item.artists.map(function(obj){ %>
-        <span id="artist"><%= obj.name %></span>
-        <% })%>
-        </p>
-        <p><strong>Song: </strong><span id="song"><%= body.item.name %></span></p>
-      </div>
+    <div id="image" class="image"></div>
+    <div class="text">
+      <p><strong>Artist:</strong>
+      <span id="artist"></span>
+      </p>
+      <p><strong>Song: </strong><span id="song"></span></p>
     </div>
+  </div>
 
   </body>
   <script src="/socket.io/socket.io.js"></script>

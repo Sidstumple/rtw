@@ -6,6 +6,21 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var PouchDB = require('pouchdb');
+
+// var db = new PouchDB('users');
+//
+// // db.put({
+// //   _id: 'dave@gmail.com',
+// //   name: 'David',
+// //   age: 69
+// // });
+//
+// db.changes().on('change', function() {
+//   console.log('Ch-Ch-Changes');
+// });
+//
+// db.replicate.to('http://example.com/mydb');
 
 server.listen(process.env.PORT || 3000);
 console.log('server listening on port 3000');
@@ -22,7 +37,11 @@ var connections = [];
 app.set('view engine', 'ejs');
 
 app.get('/', function(req, res) {
-  res.render('index');
+  if(app.accessToken){
+    res.redirect('/whatsplaying');
+  } else {
+    res.render('index');
+  }
 })
 
 app.get('/login', function(req, res) {
@@ -38,7 +57,7 @@ app.get('/login', function(req, res) {
   } else {
     // your application requests authorization
     console.log("new instance");
-    var scope = 'user-read-private user-read-email user-read-currently-playing user-read-playback-state user-read-recently-played';
+    var scope = 'user-read-private user-read-email user-read-currently-playing user-read-playback-state user-read-recently-played user-modify-playback-state';
 
     res.redirect('https://accounts.spotify.com/authorize?' +
       querystring.stringify({
@@ -81,19 +100,22 @@ app.get('/whatsplaying', function(req, res) {
 
   if (app.accessToken){
 
-    var options = {
-      url: 'https://api.spotify.com/v1/me/player/currently-playing',
+    var profile = {
+      url: 'https://api.spotify.com/v1/me/',
       headers: { 'Authorization': 'Bearer ' + app.accessToken },
       json: true
     }
-
-    request.get(options, function(error, response, body) {
-      // console.log(app.accessToken);
-      // console.log(body.item);
-
-      res.render('whatsplaying', {body: body});
+    request.get(profile, function(error, response, profile) {
+      // console.log(profile);
+      profile.images.map(function (obj) {
+        console.log(obj.url);
+        console.log(profile.display_name);
+        var image = obj.url;
+        res.render('whatsplaying', {profile: profile, proImage: image});
+      })
     });
   } else {
+    console.log('no access token for the selected scope yet.');
     res.redirect('/');
   }
 })
@@ -102,16 +124,15 @@ io.on('connection', function(socket){
   connections.push(socket);
   console.log('Connected: %s sockets connected', connections.length);
 
+
   // Disconnect
   socket.on('disconnect', function(data){
-    users.splice(users.indexOf(socket.username), 1);
     connections.splice(connections.indexOf(socket), 1);
     console.log('Disconnected: %s sockets connected', connections.length)
   });
 
   // Checks if a new song is played:
   socket.on('next song', function(data) {
-    // console.log(data.song, data.artist);
     var options = {
       url: 'https://api.spotify.com/v1/me/player/currently-playing',
       headers: { 'Authorization': 'Bearer ' + app.accessToken },
@@ -119,24 +140,19 @@ io.on('connection', function(socket){
     }
 
     request.get(options, function(error, response, body) {
-      console.log(data.song == body.item.name);
-      console.log(data.artist == app.artists);
-      console.log(data.song);
-      console.log(body.item.name);
-
-
+      var image = body.item.album.images[2].url;
       body.item.artists.map(function(obj){
         app.artists = obj.name;
       })
 
       if(data.song !== body.item.name || data.artist !== app.artists) {
-        console.log('update this sonnng!');
-        socket.emit('update song', {body: body});
+        // console.log('update this sonnng!');
+        socket.emit('update song', {body: body, image: image, artist: app.artists});
       } else {
-        console.log('still listening to the same tune?');
+        // console.log('still listening to the same tune?');
       }
     });
-    console.log('Check if a new song is played');
+    // console.log('Check if a new song is played');
   })
 
 });

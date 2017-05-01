@@ -1,15 +1,7 @@
 body {
   font-family: 'Montserrat', sans-serif;
-}
-
-img{
-  display: none;
-}
-img:nth-of-type(3) {
-  display: block;
-}
-.newsong img{
-  display: block;
+  margin: 0;
+  padding: 0;
 }
 
 .info {
@@ -25,4 +17,20 @@ img:nth-of-type(3) {
 
 .text {
   margin-left: 1em;
+}
+
+.profilebar {
+  width: 100vw;
+  background: #222;
+  color: white;
+  display: flex;
+  padding: 0.5em;
+  justify-content: flex-end;
+  box-sizing: border-box;
+}
+
+.profile-image {
+  width: 4em;
+  height: 100%;
+  clip-path: circle(1.7em at center);
 }
