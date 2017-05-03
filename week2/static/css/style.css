@@ -9,7 +9,7 @@ body {
   padding: 1em;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  /*justify-content: space-around;*/
   background: #333;
   color: white;
   align-items: center;
@@ -33,4 +33,14 @@ body {
   width: 4em;
   height: 100%;
   clip-path: circle(1.7em at center);
+}
+
+.empty {
+  min-width: 15em;
+}
+
+.image {
+  width: 64px;
+  height: 64px;
+  background: #ddd;
 }

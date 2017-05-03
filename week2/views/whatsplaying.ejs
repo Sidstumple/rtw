@@ -5,6 +5,7 @@
     <title>What's Playing</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    <meta name="viewport" content="width=device-width">
   </head>
   <body>
     <div class="profilebar">
@@ -12,19 +13,13 @@
       <p><%= profile.display_name %></p>
     </div>
     <h1>What is playing?</h1>
-    <div class="info">
-    <div id="image" class="image"></div>
-    <div class="text">
-      <p><strong>Artist:</strong>
-      <span id="artist"></span>
-      </p>
-      <p><strong>Song: </strong><span id="song"></span></p>
+    <div id="playlist">
+
     </div>
-  </div>
 
   </body>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="static/js/index.js">
+  <script src="static/js/index.js"></script>
 
   </script>
 </html>
