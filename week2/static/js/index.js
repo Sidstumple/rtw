@@ -22,33 +22,27 @@
       </div>`
       var like = document.getElementById(data.users[obj]._id+'-like');
       like.addEventListener('click', function(){
-        console.log('clicked');
         like.classList.add('liked');
       })
+      socket.emit('new user', {playlist: playlist.innerHTML})
 
-      html.inner = playlist.innerHTML;
       var info = document.getElementById('info');
       document.getElementById(data.users[obj]._id).classList.remove('empty');
     })
   })
 
+  socket.on('check song', function() {
+    socket.emit('next song');
+    // console.log('[CHEEECK]');
+  })
 
-
-
-
-  setInterval(function(){
-    socket.emit('next song')
-  }, 1000);
 
   socket.on('update song', function(data){
     Object.keys(data.users).forEach(function(obj){
-      console.log(data.users, '[THIS]');
       var song = document.getElementById(`${data.users[obj]._id}-song`);
       var artist = document.getElementById(`${data.users[obj]._id}-artist`);
       var image = document.getElementById(`${data.users[obj]._id}-image`);
       var info = document.getElementById('info');
-      console.log('///////');
-      console.log(data.users[obj]);
 
       if (document.getElementById(data.users[obj]._id) == null) {
         console.log('[NEW] song');
@@ -66,7 +60,6 @@
           <div id="${data.users[obj]._id}-like" class="like"></div>
         </div>`
       } else {
-        console.log();
         image.innerHTML = `<img src="${data.users[obj].albumImage}" alt="">`
         artist.innerHTML = data.users[obj].artist;
         song.innerHTML = data.users[obj].song;

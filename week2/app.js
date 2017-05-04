@@ -73,7 +73,6 @@ app.get('/callback', function(req, res) {
     },
     json: true
   };
-
   // use the access token to access the Spotify Web API
   request.post(authOptions, function(error, response, body) {
     var access_token = body.access_token;
@@ -119,26 +118,35 @@ app.get('/whatsplaying', function(req, res) {
   }
 })
 
+
+// new user == new key in userData
+//
+// if new key in userData then emit new user with userData obj.
+
 io.on('connection', function(socket) {
   if(userData[id].accessToken !== undefined) {
     // console.log(Object.keys(userData));
-      var options = {
-        url: 'https://api.spotify.com/v1/me/player/currently-playing',
-        headers: { 'Authorization': 'Bearer ' + userData[id].accessToken },
-        json: true
-      }
-      request.get(options, function(error, response, body) {
-        userData[id].albumImage = body.item.album.images[2].url;
-        userData[id].song = body.item.name;
-        userData[id].artist = '';
+    var options = {
+      url: 'https://api.spotify.com/v1/me/player/currently-playing',
+      headers: { 'Authorization': 'Bearer ' + userData[id].accessToken },
+      json: true
+    }
+    request.get(options, function(error, response, body) {
+      userData[id].albumImage = body.item.album.images[2].url;
+      userData[id].song = body.item.name;
+      userData[id].artist = '';
 
-        body.item.artists.map(function (obj) {
-          userData[id].artist += `${obj.name} `;
-        })
-        console.log(userData);
-        socket.emit('start', {users: userData});
-      });
+      body.item.artists.map(function (obj) {
+        userData[id].artist += `${obj.name} `;
+      })
+      console.log(userData);
+      socket.emit('start', {users: userData});
+    });
   }
+
+  setInterval(function(){
+    socket.emit('check song')
+  }, 1000);
 
   connections.push(socket);
   console.log('Connected: %s sockets connected', connections.length);
@@ -158,6 +166,7 @@ io.on('connection', function(socket) {
       }
 
       request.get(options, function(error, response, body) {
+        // console.log(body);
         var storedSong = userData[key].song;
         var storedArtist = userData[key].artist;
         var newSong = body.item.name;
@@ -167,21 +176,17 @@ io.on('connection', function(socket) {
         })
 
         console.log(userData[id].newArtist);
+        console.log('//////////');
+        console.log("[UPDATE] song");
+        userData[key].albumImage = body.item.album.images[2].url;
+        userData[key].song = body.item.name;
+        userData[key].artist = '';
 
-        if(storedArtist !== userData[key].newArtist || storedSong !== newSong) {
-          console.log("[UPDATE] song");
-          userData[key].albumImage = body.item.album.images[2].url;
-          userData[key].song = body.item.name;
-          userData[key].artist = '';
-
-          body.item.artists.map(function (obj) {
-            userData[key].artist += `${obj.name} `;
-          })
-          console.log(userData);
-          socket.emit('update song', {users: userData});
-        } else {
-          console.log('same song');
-        }
+        body.item.artists.map(function (obj) {
+          userData[key].artist += `${obj.name} `;
+        })
+        console.log(userData);
+        socket.emit('update song', {users: userData});
     console.log('Check if a new song is played');
   })
 });
