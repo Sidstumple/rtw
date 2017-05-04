@@ -156,6 +156,9 @@ io.on('connection', function(socket) {
     console.log('Disconnected: %s sockets connected', connections.length);
   });
 
+  socket.on('like', function(target) {
+    socket.emit('liked', {target: target.id});
+  })
   // Checks if a new song is played:
   socket.on('next song', function(data) {
     Object.keys(userData).forEach(function(key){

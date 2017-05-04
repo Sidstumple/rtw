@@ -21,8 +21,10 @@
         <div id="${data.users[obj]._id}-like" class="like"></div>
       </div>`
       var like = document.getElementById(data.users[obj]._id+'-like');
-      like.addEventListener('click', function(){
+      like.addEventListener('click', function(e){
         like.classList.add('liked');
+        console.log(e.target.id);
+        socket.emit('like', {id: e.target.id})
       })
       socket.emit('new user', {playlist: playlist.innerHTML})
 
@@ -34,6 +36,11 @@
   socket.on('check song', function() {
     socket.emit('next song');
     // console.log('[CHEEECK]');
+  })
+
+  socket.on('liked', function(id) {
+    console.log(id.target);
+    document.getElementById(id.target).classList.add('liked');
   })
 
 
@@ -59,6 +66,12 @@
           </div>
           <div id="${data.users[obj]._id}-like" class="like"></div>
         </div>`
+        var like = document.getElementById(data.users[obj]._id+'-like');
+        like.addEventListener('click', function(e){
+          like.classList.add('liked');
+          console.log(e.target.id);
+          socket.emit('like', {id: e.target.id})
+        })
       } else {
         image.innerHTML = `<img src="${data.users[obj].albumImage}" alt="">`
         artist.innerHTML = data.users[obj].artist;
